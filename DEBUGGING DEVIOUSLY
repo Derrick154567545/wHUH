@@ -1,0 +1,277 @@
+
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Guhuh
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Guh");
+            int[,] board = new int[9, 9];
+            List<int> exclude = new List<int>() { };
+            int dupecoordcheck = 1;
+            int xselect = 0;
+            int yselect = 0;
+            int testing = 0;
+            int adding = 0;
+            int numinquestion = 0;
+            int xcellcheck = 0;
+            int ycellcheck = 0;
+            int attempts = 0;
+            Random rnd = new Random();
+            int limit = 0; //u know why this is here
+            int uno = 0; //devious
+            bool debugging = false;
+            while (testing < 81) //81 //From 60 to 74 to 76 to 77
+            {
+                //devious
+                for (int ox = 0; ox < 9; ox++) 
+                {
+                    for (int oy = 0; oy < 9; oy++)
+                    {
+                        exclude = new List<int>();
+
+                        for (int x = 0; x < 9; x++)
+                        {
+                            exclude.Add(board[x, oy]);
+                        }
+                        for (int y = 0; y < 9; y++)
+                        {
+                            exclude.Add(board[ox, y]);
+                        }
+                        xcellcheck = (ox / 3) * 3;
+                        ycellcheck = (oy / 3) * 3;
+                        for (int cx = 0; cx < 3; cx++)
+                        {
+                            for (int cy = 0; cy < 3; cy++)
+                            {
+                                exclude.Add(board[xcellcheck, ycellcheck]);
+                                ycellcheck = ycellcheck + 1;
+                            }
+                            ycellcheck = ycellcheck - 3;
+                            xcellcheck = xcellcheck + 1;
+                        }
+                        for (int op = 0; op < 10; op++) //9 or 10???
+                        {
+                            for (int ob = 0; ob < exclude.Count; ob++)
+                            {
+                                if (op == exclude[ob])
+                                {
+                                    uno = uno + 1;
+                                    break;
+                                }
+                            }
+                            if (uno == 0)
+                            {
+                                board[ox, oy] = op;
+                                Console.WriteLine(op);
+                                Console.WriteLine(string.Join(",", exclude));
+
+
+
+
+                                for (int rows = 0; rows < 9; rows++)
+                                {
+                                    for (int cols = 0; cols < 9; cols++)
+                                    {
+                                        Console.Write(board[rows, cols] + "\t");
+                                    }
+                                    Console.WriteLine(); //What this do without
+                                }
+
+                            }
+                            uno = 0;
+                        }
+
+                    }
+                }
+
+                
+
+                //Console.Write("This is the number of attempts    ");
+                //Console.WriteLine(attempts);
+                Console.ReadKey();
+
+
+
+
+
+
+                //devious 2
+                for (int ox = 0; ox < 9; ox++)
+                {
+                    for (int oy = 0; oy < 9; oy++)
+                    {
+                        exclude = new List<int>();
+
+                        for (int x = 0; x < 9; x++)
+                        {
+                            exclude.Add(board[x, oy]);
+                        }
+                        for (int y = 0; y < 9; y++)
+                        {
+                            exclude.Add(board[ox, y]);
+                        }
+                        xcellcheck = (ox / 3) * 3;
+                        ycellcheck = (oy / 3) * 3;
+                        for (int cx = 0; cx < 3; cx++)
+                        {
+                            for (int cy = 0; cy < 3; cy++)
+                            {
+                                exclude.Add(board[xcellcheck, ycellcheck]);
+                                ycellcheck = ycellcheck + 1;
+                            }
+                            ycellcheck = ycellcheck - 3;
+                            xcellcheck = xcellcheck + 1;
+                        }
+
+                        for (int op = 0; op < 10; op++)
+                        {
+                            for (int ob = 0; ob < exclude.Count; ob++)
+                            {
+                                if (op == exclude[ob])
+                                {
+                                    uno = uno + 1;
+                                    break;
+                                }
+                            }
+                            if (uno == 0)
+                            {
+                                board[ox, oy] = op;
+                            }
+                            uno = 0;
+                        }
+                    }
+                }
+
+
+                exclude = new List<int>();
+                dupecoordcheck = 1;
+                while (dupecoordcheck == 1)
+                {
+                    xselect = rnd.Next(0, 9);
+                    yselect = rnd.Next(0, 9);
+                    if (board[xselect, yselect] > 0)
+                    {
+                        dupecoordcheck = dupecoordcheck - 1;
+                    }
+                    dupecoordcheck = dupecoordcheck + 1;
+                }
+
+                for (int x = 0; x < 9; x++)
+                {
+                    exclude.Add(board[x, yselect]);
+                }
+                for (int y = 0; y < 9; y++)
+                {
+                    exclude.Add(board[xselect, y]);
+                }
+                xcellcheck = (xselect / 3) * 3;
+                ycellcheck = (yselect / 3) * 3;
+                for (int cx = 0; cx < 3; cx++)
+                {
+                    for (int cy = 0; cy < 3; cy++)
+                    {
+                        exclude.Add(board[xcellcheck, ycellcheck]);
+                        ycellcheck = ycellcheck + 1;
+                    }
+                    ycellcheck = ycellcheck - 3;
+                    xcellcheck = xcellcheck + 1;
+                }
+
+                adding = 0;
+                limit = 0; //???
+                while (adding == 0)
+                {
+                    adding = 1;
+                    numinquestion = rnd.Next(1, 10);
+                    limit = limit + 1;
+                    if (limit > 100) //do something devious here
+                    {
+                        exclude = new List<int>();
+                        for (int x = 0; x < 9; x++)
+                        {
+                            board[x, yselect] = 0;
+                        }
+                        for (int y = 0; y < 9; y++)
+                        {
+                            board[xselect, y] = 0;
+                        }
+                        xcellcheck = (xselect / 3) * 3;
+                        ycellcheck = (yselect / 3) * 3;
+                        for (int cx = 0; cx < 3; cx++)
+                        {
+                            for (int cy = 0; cy < 3; cy++)
+                            {
+                                board[xcellcheck, ycellcheck] = 0;
+                                ycellcheck = ycellcheck + 1;
+                            }
+                            ycellcheck = ycellcheck - 3;
+                            xcellcheck = xcellcheck + 1;
+                        }
+                        attempts = attempts + 1;
+                    }
+                    for (int z = 0; z < exclude.Count; z++)
+                    {
+                        if (numinquestion == exclude[z])
+                        {
+                            adding = 0;
+                        }
+                    }
+                    board[xselect, yselect] = numinquestion;
+                    testing = 0;
+                    for (int tx = 0; tx < 9; tx++)
+                    {
+                        for (int ty = 0; ty < 9; ty++)
+                        {
+                            if (board[tx, ty] > 0)
+                            {
+                                testing = testing + 1;
+                            }
+                        }
+                    }
+
+                }
+
+                //DEBUGGING
+                if (debugging)
+                {
+                    for (int rows = 0; rows < 9; rows++)
+                    {
+                        for (int cols = 0; cols < 9; cols++)
+                        {
+                            Console.Write(board[rows, cols] + "\t");
+                        }
+                        Console.WriteLine(); //What this do without
+                    }
+                    Console.WriteLine(string.Join(",", exclude));
+                    Console.WriteLine(numinquestion);
+                    Console.WriteLine(yselect); //This is actually x
+                    Console.WriteLine(xselect); //This is actually y
+                    Console.WriteLine(testing);
+                    Console.Write("This is the number of attempts    ");
+                    Console.WriteLine(attempts);
+                }
+
+            }
+
+            for (int rows = 0; rows < 9; rows++)
+            {
+                for (int cols = 0; cols < 9; cols++)
+                {
+                    Console.Write(board[rows, cols] + "\t");
+                }
+                Console.WriteLine(); //What this do without
+            }
+            Console.Write("This is the number of attempts    ");
+            Console.WriteLine(attempts);
+            Console.ReadKey();
+        }
+    }
+}
